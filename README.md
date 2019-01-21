@@ -3,9 +3,7 @@ Simple tool to backup and restore ChromeOS Crostini containers, influenced by th
 [https://www.reddit.com/r/Crostini/wiki/howto/backup](https://www.reddit.com/r/Crostini/wiki/howto/backup)
 
 ## Demo Video
-{::nomarkdown}
-<div style="position: relative; padding-bottom: 66.66666666666666%; height: 0;"><iframe src="https://www.useloom.com/embed/71cdc4055744465f8f467f65cd26db44" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"></iframe></div>
-{:/}
+[https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44](https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44)
 
 ## Installation
 * Open a Crosh termainal using ctrl+alt+p
