@@ -1,5 +1,6 @@
 # crostini-backup-restore
-Simple tool to backup and restore ChromeOS Crostini containers
+Simple tool to backup and restore ChromeOS Crostini containers, influenced by the excelent readme on Reddit
+[https://www.reddit.com/r/Crostini/wiki/howto/backup](https://www.reddit.com/r/Crostini/wiki/howto/backup)
 
 ## Installation
 * Open a Crosh termainal using ctrl+alt+p
