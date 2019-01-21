@@ -6,7 +6,7 @@ Simple tool to backup and restore ChromeOS Crostini containers, influenced by th
 [https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44](https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44)
 
 ## Installation
-* Open a Crosh termainal using ctrl+alt+p
+* Open a Crosh termainal using ctrl+alt+t
 * Start a new session `vsh termina`
 * Copy the backup binary to /mnt/stateful/lxd_conf
 ```bash
