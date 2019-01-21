@@ -7,7 +7,7 @@ Simple tool to backup and restore ChromeOS Crostini containers, influenced by th
 * Start a new session `vsh termina`
 * Copy the backup binary to /mnt/stateful/lxd_conf
 ```bash
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ curl -l https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.1/backup -o /mnt/stateful/lxd_conf/backup
+(termina) chronos@localhost /mnt/stateful/lxd_conf $ curl -L https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.1/backup -o /mnt/stateful/lxd_conf/backup
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   597    0   597    0     0    736      0 --:--:-- --:--:-- --:--:--   790
