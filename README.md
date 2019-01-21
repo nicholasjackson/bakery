@@ -9,11 +9,19 @@ Simple tool to backup and restore ChromeOS Crostini containers, influenced by th
 * Open a Crosh termainal using ctrl+alt+t
 * Start a new session `vsh termina`
 * Copy the backup binary to /mnt/stateful/lxd_conf
+
+The latest release can be found, in the `Releases` section, select the correct file for your archictecture.
+
+Example Linux AMD64:
 ```bash
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ curl -L https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.1/backup -o /mnt/stateful/lxd_conf/backup
+(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.2/crostini-backup-restore_0.0.2_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/backup.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   597    0   597    0     0    736      0 --:--:-- --:--:-- --:--:--   790
+100   639    0   639    0     0    193      0 --:--:--  0:00:03 --:--:--  2158
+100  752k  100  752k    0     0   138k      0  0:00:05  0:00:05 --:--:--  660k
+
+cd /mnt/stateful/lxd_conf
+tar -zxf backup.tar.gz 
 ```
 
 ## Using backup
