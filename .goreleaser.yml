@@ -3,6 +3,19 @@
 builds:
 - env:
   - CGO_ENABLED=0
+  main: ./cmd/main.go
+  binary: backup
+  ldflags:
+   - -s -w -X main.version={{.Version}}
+  goos:
+    - linux
+  goarch:
+    - amd64
+    - arm
+    - arm64
+  goarm:
+    - 6
+    - 7
 archive:
   replacements:
     linux: Linux
