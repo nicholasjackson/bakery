@@ -13,9 +13,6 @@ builds:
     - amd64
     - arm
     - arm64
-  goarm:
-    - 6
-    - 7
 archive:
   replacements:
     linux: Linux
@@ -27,3 +24,5 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+    - Merge pull request
+    - Merge branch
