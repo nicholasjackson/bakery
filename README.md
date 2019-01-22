@@ -2,6 +2,8 @@
 Simple tool to backup and restore ChromeOS Crostini containers, influenced by the excelent readme on Reddit
 [https://www.reddit.com/r/Crostini/wiki/howto/backup](https://www.reddit.com/r/Crostini/wiki/howto/backup)
 
+[![CircleCI](https://circleci.com/gh/nicholasjackson/crostini-backup-restore.svg?style=svg)](https://circleci.com/gh/nicholasjackson/crostini-backup-restore)
+
 ## Demo Video
 [https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44](https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44)
 
@@ -14,7 +16,7 @@ The latest release can be found, in the `Releases` section, select the correct f
 
 Example Linux AMD64:
 ```bash
-(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.2/crostini-backup-restore_0.0.2_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/backup.tar.gz
+(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.3/crostini-backup-restore_0.0.3_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/backup.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   639    0   639    0     0    193      0 --:--:--  0:00:03 --:--:--  2158
