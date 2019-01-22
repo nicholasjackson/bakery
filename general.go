@@ -8,23 +8,27 @@ import (
 	"regexp"
 )
 
-func stopContainer() {
-	fmt.Printf("Stopping container %s\n", *container)
-	executeCommand("lxc", "stop", *container, "--force")
+// General backup and restore functions
+type General struct {
+}
+
+func (g *General) stopContainer(containerName string) {
+	fmt.Printf("Stopping container %s\n", containerName)
+	g.executeCommand("lxc", "stop", containerName, "--force")
 	fmt.Println("")
 }
 
-func startContainer() {
-	fmt.Printf("Starting container %s\n", *container)
-	executeCommand("lxc", "start", *container)
+func (g *General) startContainer(containerName string) {
+	fmt.Printf("Starting container %s\n", containerName)
+	g.executeCommand("lxc", "start", containerName)
 }
 
-func mountBackupPath() {
-	fmt.Printf("Mounting backup path %s into container %s\n", *backupLocation, *container)
+func (g *General) mountBackupPath(backupLocation, containerName string) {
+	fmt.Printf("Mounting backup path %s into container %s\n", backupLocation, containerName)
 
 	// check if backup path mounted
 	output := bytes.NewBuffer([]byte{})
-	cmd := exec.Command("lxc", "config", "device", "show", *container)
+	cmd := exec.Command("lxc", "config", "device", "show", containerName)
 	cmd.Stdout = output
 	cmd.Stderr = output
 	err := cmd.Run()
@@ -34,18 +38,18 @@ func mountBackupPath() {
 		os.Exit(1)
 	}
 
-	validMount := regexp.MustCompile("source: " + *backupLocation)
+	validMount := regexp.MustCompile("source: " + backupLocation)
 	if validMount.MatchString(output.String()) {
 		fmt.Println("Mount path already exists")
 		fmt.Println("")
 		return
 	}
 
-	executeCommand("lxc", "config", "device", "add", *container, "lxd-conf", "disk", "source="+*backupLocation, "path=/mnt/lxd_conf")
+	g.executeCommand("lxc", "config", "device", "add", containerName, "lxd-conf", "disk", "source="+backupLocation, "path=/mnt/lxd_conf")
 	fmt.Println("")
 }
 
-func executeCommand(command string, args ...string) error {
+func (g *General) executeCommand(command string, args ...string) error {
 	cmd := exec.Command(command, args...)
 	cmd.Stdout = os.Stdout
 	cmd.Stderr = os.Stderr

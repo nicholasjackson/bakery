@@ -4,6 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"os"
+
+	baker "github.com/nicholasjackson/crostini-backup"
 )
 
 var version = "dev"
@@ -45,6 +47,14 @@ func printUsage() {
 
 func doBackup() {
 	fmt.Println("Starting backup, WARNING: This operation can take a long time")
+	b := baker.Backup{
+		BackupName:              "backup",
+		BackupLocation:          *terminaLocation,
+		ContainerBackupLocation: *archiveLocation,
+		ContainerName:           *container,
+		SnapShotName:            *snapShotName,
+	}
+	b.Execute()
 }
 
 func doRestore() {

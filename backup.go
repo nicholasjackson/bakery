@@ -5,19 +5,26 @@ import (
 	"time"
 )
 
+// Backup a Crostini Container
 type Backup struct {
+	BackupName              string
+	BackupLocation          string
+	ContainerBackupLocation string
+	ContainerName           string
+	SnapShotName            string
+
+	General
 }
 
+// Execute starts the backup
 func (b *Backup) Execute() {
-	backupName = *container + "-backup"
-
 	fmt.Println("")
 	b.createSnapShot()
 	b.publishBackup()
 	b.exportImage()
 	b.splitBackup()
-	b.startContainer()
-	b.mountBackupPath()
+	b.startContainer(b.ContainerName)
+	b.mountBackupPath(b.BackupLocation, b.ContainerName)
 	b.moveBackupFiles()
 	b.deleteBackupImage()
 
@@ -25,50 +32,54 @@ func (b *Backup) Execute() {
 }
 
 func (b *Backup) createSnapShot() {
-	*snapShotName = fmt.Sprintf("%s-%d", *snapShotName, time.Now().Nanosecond())
-	fmt.Printf("Creating snapshot of container:%s name:%s\n", *container, *snapShotName)
+	b.SnapShotName = fmt.Sprintf("%s-%d", b.SnapShotName, time.Now().Nanosecond())
+	fmt.Printf("Creating snapshot of container:%s name:%s\n", b.ContainerName, b.SnapShotName)
 
-	executeCommand("lxc", "snapshot", *container, *snapShotName)
+	b.executeCommand("lxc", "snapshot", b.ContainerName, b.SnapShotName)
 	fmt.Println()
 }
 
 func (b *Backup) publishBackup() {
-	fmt.Printf("Publish container: %s to %s\n", *container, backupName)
+	fmt.Printf("Publish container: %s to %s\n", b.ContainerName, b.BackupName)
 	fmt.Println("If the container publish is interupted, your container may be left in a bad state,")
-	fmt.Printf("in this instance you can restore the snapshot using the command: lxc restore %s %s\n", *container, *snapShotName)
+	fmt.Printf(
+		"in this instance you can restore the snapshot using the command: lxc restore %s %s\n",
+		b.ContainerName,
+		b.SnapShotName,
+	)
 
-	executeCommand("lxc", "publish", *container, "--alias", backupName)
+	b.executeCommand("lxc", "publish", b.ContainerName, "--alias", b.BackupName)
 	fmt.Println()
 }
 
 func (b *Backup) exportImage() {
-	fmt.Printf("Exporting container to: %s\n", *backupLocation)
-	executeCommand("lxc", "image", "export", backupName, *backupLocation+"/"+backupName)
+	fmt.Printf("Exporting container to: %s\n", b.BackupLocation)
+	b.executeCommand("lxc", "image", "export", b.BackupName, b.BackupLocation+"/"+b.BackupName)
 	fmt.Println()
 }
 
 func (b *Backup) splitBackup() {
-	backupFileLocation := *backupLocation + "/" + backupName + ".tar.gz"
+	backupFileLocation := b.BackupLocation + "/" + b.BackupName + ".tar.gz"
 
 	fmt.Println("Splitting backup into 3GB chunks")
-	executeCommand("split", "-b", "3GB", backupFileLocation, backupFileLocation+".")
-	executeCommand("rm", backupFileLocation)
+	b.executeCommand("split", "-b", "3GB", backupFileLocation, backupFileLocation+".")
+	b.executeCommand("rm", backupFileLocation)
 	fmt.Println()
 }
 
 func (b *Backup) moveBackupFiles() {
-	fmt.Printf("Moving backup files to /home/%s in container %s\n", *username, *container)
+	fmt.Printf("Moving backup files to %s in container %s\n", b.ContainerBackupLocation, b.ContainerName)
 	// create the user folder if required
-	executeCommand("lxc", "exec", *container, "--", "mkdir", "-p", "/home/"+*username)
+	b.executeCommand("lxc", "exec", b.ContainerName, "--", "mkdir", "-p", b.ContainerBackupLocation)
 	// move the files
-	executeCommand("lxc", "exec", *container, "--", "find", "/mnt/lxd_conf", "-name", "*.tar.gz.*", "-exec", "cp", "{}", "-t", "/home/"+*username, ";")
+	b.executeCommand("lxc", "exec", b.ContainerName, "--", "find", "/mnt/lxd_conf", "-name", "*.tar.gz.*", "-exec", "cp", "{}", "-t", b.ContainerBackupLocation, ";")
 	// delete the backups
-	executeCommand("find", *backupLocation, "-name", "*.tar.gz.*", "-exec", "rm", "{}", ";")
+	b.executeCommand("find", b.BackupLocation, "-name", "*.tar.gz.*", "-exec", "rm", "{}", ";")
 	fmt.Println("")
 }
 
 func (b *Backup) deleteBackupImage() {
-	fmt.Printf("Deleting temporary image %s", backupName)
-	executeCommand("lxc", "image", "delete", backupName)
+	fmt.Printf("Deleting temporary image %s", b.BackupName)
+	b.executeCommand("lxc", "image", "delete", b.BackupName)
 	fmt.Println("")
 }
