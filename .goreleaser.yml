@@ -4,7 +4,7 @@ builds:
 - env:
   - CGO_ENABLED=0
   main: ./cmd/main.go
-  binary: backup
+  binary: bakery
   ldflags:
    - -s -w -X main.version={{.Version}}
   goos:

@@ -7,11 +7,12 @@ import (
 
 // Backup a Crostini Container
 type Backup struct {
-	BackupName              string
-	BackupLocation          string
-	ContainerBackupLocation string
-	ContainerName           string
-	SnapShotName            string
+	BackupName       string
+	BackupLocation   string
+	ArchiveLocation  string
+	ArchiveContainer string
+	ContainerName    string
+	SnapShotName     string
 
 	General
 }
@@ -20,11 +21,12 @@ type Backup struct {
 func (b *Backup) Execute() {
 	fmt.Println("")
 	b.createSnapShot()
+	b.stopContainer(b.ContainerName)
 	b.publishBackup()
 	b.exportImage()
 	b.splitBackup()
 	b.startContainer(b.ContainerName)
-	b.mountBackupPath(b.BackupLocation, b.ContainerName)
+	b.mountBackupPath(b.BackupLocation, b.ArchiveContainer)
 	b.moveBackupFiles()
 	b.deleteBackupImage()
 
@@ -68,11 +70,11 @@ func (b *Backup) splitBackup() {
 }
 
 func (b *Backup) moveBackupFiles() {
-	fmt.Printf("Moving backup files to %s in container %s\n", b.ContainerBackupLocation, b.ContainerName)
+	fmt.Printf("Moving backup files to %s in container %s\n", b.ArchiveLocation, b.ArchiveContainer)
 	// create the user folder if required
-	b.executeCommand("lxc", "exec", b.ContainerName, "--", "mkdir", "-p", b.ContainerBackupLocation)
+	b.executeCommand("lxc", "exec", b.ArchiveContainer, "--", "mkdir", "-p", b.ArchiveLocation)
 	// move the files
-	b.executeCommand("lxc", "exec", b.ContainerName, "--", "find", "/mnt/lxd_conf", "-name", "*.tar.gz.*", "-exec", "cp", "{}", "-t", b.ContainerBackupLocation, ";")
+	b.executeCommand("lxc", "exec", b.ArchiveContainer, "--", "find", "/mnt/lxd_conf", "-name", "*.tar.gz.*", "-exec", "cp", "{}", "-t", b.ArchiveLocation, ";")
 	// delete the backups
 	b.executeCommand("find", b.BackupLocation, "-name", "*.tar.gz.*", "-exec", "rm", "{}", ";")
 	fmt.Println("")

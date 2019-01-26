@@ -14,6 +14,26 @@ type General struct {
 
 func (g *General) stopContainer(containerName string) {
 	fmt.Printf("Stopping container %s\n", containerName)
+
+	// check if container is running
+	output := bytes.NewBuffer([]byte{})
+	cmd := exec.Command("lxc", "info", containerName)
+	cmd.Stdout = output
+	cmd.Stderr = output
+	err := cmd.Run()
+
+	if err != nil {
+		fmt.Println(output.String())
+		os.Exit(1)
+	}
+
+	running := regexp.MustCompile("Status: Running")
+	if !running.MatchString(output.String()) {
+		fmt.Println("Container already stopped")
+		fmt.Println("")
+		return
+	}
+
 	g.executeCommand("lxc", "stop", containerName, "--force")
 	fmt.Println("")
 }
