@@ -1,4 +1,4 @@
-package baker
+package bakery
 
 import (
 	"bytes"
@@ -65,7 +65,7 @@ func (g *General) mountBackupPath(backupLocation, containerName string) {
 		return
 	}
 
-	g.executeCommand("lxc", "config", "device", "add", containerName, "lxd-conf", "disk", "source="+backupLocation, "path=/mnt/lxd_conf")
+	g.executeCommand("lxc", "config", "device", "add", containerName, "lxd-conf", "disk", "source="+backupLocation, "path=/mnt/lxd_conf", "readonly=false")
 	fmt.Println("")
 }
 

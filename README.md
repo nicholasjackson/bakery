@@ -1,4 +1,4 @@
-# crostini-backup-restore
+# Bakery - Crostini backup and restore tool
 Simple tool to backup and restore ChromeOS Crostini containers, influenced by the excelent readme on Reddit
 [https://www.reddit.com/r/Crostini/wiki/howto/backup](https://www.reddit.com/r/Crostini/wiki/howto/backup)
 
@@ -6,7 +6,7 @@ Simple tool to backup and restore ChromeOS Crostini containers, influenced by th
 [https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44](https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44)
 
 ## Installation
-* Open a Crosh termainal using ctrl+alt+t
+* Open a Crosh terminal using ctrl+alt+t
 * Start a new session `vsh termina`
 * Copy the backup binary to /mnt/stateful/lxd_conf
 
@@ -24,50 +24,104 @@ cd /mnt/stateful/lxd_conf
 tar -zxf backup.tar.gz 
 ```
 
-## Using backup
-A full list of options can be found by running backup with the help flag
+## Backup a Crostini container
+A full list of options can be found by running bakery with the help flag
+
 ```bash
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./backup --help
-Usage of ./backup:
-  -backup-location string
-        Location to backup container (default "/mnt/stateful/lxd_conf")
+(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery backup --help
+Bakery - Crostini Backup and Restore tool
+version: v0.0.3-next
+
+Usage of backup:
+  -archive-container string
+        Name of the container to write backup files (default "penguin")
+  -archive-location string
+        Location of archive files, this is generally the home folder of your current container (default "/home/chronos")
   -container string
         Name of the container to backup (default "penguin")
   -snapshot-prefix string
         Prefix of the snapshot to take, snapshots will have time appended to them (default "backup-snapshot")
-  -username string
-        Crostini username e.g. jacksonnic (default "chronos")
+  -termina-location string
 ```
 
-To backup a Crostini container use the following command, replace `container` with your own container name and `username` with your own username:
+To backup a Crostini container use the following command, replace `container` with your own container name and `archive-location` with the location to store the backup files.  Generally this should be something like your home folder so you can copy the files using ChromeOS files:
 
-```
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./backup -container penguin --username jacksonnic
-Crostini Backup and Restore tool version: dev
+```bash
+(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery backup -container tester -archive-location /home/jacksonnic
+Bakery - Crostini Backup and Restore tool
+version: v0.0.3-next
+
 Starting backup, WARNING: This operation can take a long time
 
-Stopping container penguin
+Creating snapshot of container:tester name:backup-snapshot-52723394
 
-Creating snapshot of container:penguin name:backup-snapshot-85563359
+Stopping container tester
 
-Publish container: penguin to penguin-backup
+Publish container: tester to backup
 If the container publish is interupted, your container may be left in a bad state,
-in this instance you can restore the snapshot using the command: lxc restore penguin backup-snapshot-85563359
-Container published with fingerprint: d9468e72eeaa7d74a73eb39654fe278a14535a20b450077df672071c6b87d689
+in this instance you can restore the snapshot using the command: lxc restore tester backup-snapshot-52723394
+Container published with fingerprint: 3b46b83105b3f2da09e70531b41705187cf58cc1e015eb14d1b1a778ef4b962f
 
 Exporting container to: /mnt/stateful/lxd_conf
 Image exported successfully!           
 
 Splitting backup into 3GB chunks
 
-Starting container penguin
+Starting container tester
 Mounting backup path /mnt/stateful/lxd_conf into container penguin
-Device lxd-conf added to penguin
+Mount path already exists
 
 Moving backup files to /home/jacksonnic in container penguin
+
+Deleting temporary image backup
 ```
 
-The backup files will be output into your `Linux Files` folder in 3GB chunks.  Once the backup has completed you can move these to external storage for safe storage.
+The backup files will be output into your `archive-location` folder in 3GB chunks.  Once the backup has completed you can move these to external storage for safe storage.
+
+## Restore a Crostini container
+A full list of options can be found by running bakery with the help flag
+
+```bash
+(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery restore -help
+Bakery - Crostini Backup and Restore tool
+version: v0.0.3-next
+
+Usage of restore:
+  -archive-container string
+        Name of the container to read backup files from (default "penguin")
+  -archive-location string
+        Location of archive files, this is generally the home folder of your current container (default "/home/chronos")
+  -container string
+        Name of the container to restore (default "penguin")
+  -termina-location string
+        Location to store temporary backup files in termina (default "/mnt/stateful/lxd_conf")
+```
+
+To restore a container, first copy your backup archive to a running Crostini container. You can then use the following command replacing the value of the container flag with the name to which you want to restore your backup and the archive-location to the location of your backup files in a running container. Generally this is the home folder. 
+
+```bash
+(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery restore --container tester2 -archive-location /home/jacksonnic
+Bakery - Crostini Backup and Restore tool
+version: v0.0.3-next
+
+Starting restore, WARNING: This operation can take a long time
+
+Mounting backup path /mnt/stateful/lxd_conf into container penguin
+Mount path already exists
+
+Moving backup files from /home/jacksonnic in container penguin
+
+Merge backup files back into a single archive /mnt/stateful/lxd_conf/backup.tar.gz
+
+importing backup /mnt/stateful/lxd_conf/backup.tar.gz to image backup
+Image imported with fingerprint: 3b46b83105b3f2da09e70531b41705187cf58cc1e015eb14d1b1a778ef4b962f
+
+Initializing container tester2 from image backup
+Creating tester2
+
+Deleting backup image backup
+
+```
 
 ## Testing
 To test `backup` use an empty temporary container, this can be created using the following steps:
@@ -78,44 +132,7 @@ Creating tester
 (termina) chronos@localhost /mnt/stateful/lxd_conf $ lxc start tester
 ```
 
-You can then run a test backup on this container:
-```bash
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./backup -container tester
-Crostini Backup and Restore tool version: dev
-Starting backup, WARNING: This operation can take a long time
-
-Stopping container tester
-
-Creating snapshot of container:tester name:backup-snapshot-85563359
-
-Publish container: tester to tester-backup
-If the container publish is interupted, your container may be left in a bad state,
-in this instance you can restore the snapshot using the command: lxc restore tester backup-snapshot-85563359
-Container published with fingerprint: d9468e72eeaa7d74a73eb39654fe278a14535a20b450077df672071c6b87d689
-
-Exporting container to: /mnt/stateful/lxd_conf
-Image exported successfully!           
-
-Splitting backup into 3GB chunks
-
-Starting container tester
-Mounting backup path /mnt/stateful/lxd_conf into container tester
-Device lxd-conf added to tester
-
-Moving backup files to /home/chronos in container tester
-```
-
-The backup files will be stored in the home folder `/home/chronos`, you can validate that these are present with the follwing command:
-
-```bash
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ lxc exec tester -- ls -las /home/chronos
-total 318040
-     0 drwxr-xr-x 1 root root        46 Jan 21 15:44 .
-     0 drwxr-xr-x 1 root root        14 Jan 21 15:44 ..
-318040 -rw-r--r-- 1 root root 325670095 Jan 21 15:44 tester-backup.tar.gz.aa
-```
-
-You can now delete the temporary container
+You can delete the temporary container using the following command
 
 ```bash
 lxc delete tester --force

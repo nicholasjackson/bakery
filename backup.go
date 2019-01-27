@@ -1,4 +1,4 @@
-package baker
+package bakery
 
 import (
 	"fmt"

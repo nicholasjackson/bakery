@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	baker "github.com/nicholasjackson/crostini-backup"
+	bakery "github.com/nicholasjackson/crostini-backup"
 )
 
 var version = "dev"
@@ -79,7 +79,7 @@ func printUsage() {
 
 func doBackup() {
 	fmt.Println("Starting backup, WARNING: This operation can take a long time")
-	b := baker.Backup{
+	b := bakery.Backup{
 		BackupName:       "backup",
 		BackupLocation:   *bfTerminaLocation,
 		ArchiveLocation:  *bfArchiveLocation,
@@ -92,4 +92,12 @@ func doBackup() {
 
 func doRestore() {
 	fmt.Println("Starting restore, WARNING: This operation can take a long time")
+	r := bakery.Restore{
+		BackupName:       "backup",
+		TerminaLocation:  *rfTerminaLocation,
+		ArchiveLocation:  *rfArchiveLocation,
+		ArchiveContainer: *rfArchiveContainer,
+		ContainerName:    *rfContainer,
+	}
+	r.Execute()
 }
