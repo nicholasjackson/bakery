@@ -2,10 +2,10 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.11.4
+      - image: circleci/golang:1.11.5
     environment:
       GO111MODULE: "on"
-    working_directory: /go/src/github.com/nicholasjackson/crostini-backup
+    working_directory: /go/src/github.com/nicholasjackson/bakery
     steps:
       - checkout
       - run: 
@@ -16,10 +16,10 @@ jobs:
           command: go test -v --race ./...
   release:
     docker:
-      - image: circleci/golang:1.11.4
+      - image: circleci/golang:1.11.5
     environment:
       GO111MODULE: "on"
-    working_directory: /go/src/github.com/nicholasjackson/crostini-backup
+    working_directory: /go/src/github.com/nicholasjackson/bakery
     steps:
       - checkout
       - run: 
