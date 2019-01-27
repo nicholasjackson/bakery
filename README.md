@@ -2,7 +2,7 @@
 Simple tool to backup and restore ChromeOS Crostini containers, influenced by the excelent readme on Reddit
 [https://www.reddit.com/r/Crostini/wiki/howto/backup](https://www.reddit.com/r/Crostini/wiki/howto/backup)
 
-[![CircleCI](https://circleci.com/gh/nicholasjackson/crostini-backup-restore.svg?style=svg)](https://circleci.com/gh/nicholasjackson/crostini-backup-restore)
+[![CircleCI](https://circleci.com/gh/nicholasjackson/bakery.svg?style=svg)](https://circleci.com/gh/nicholasjackson/bakery)
 
 ## Demo Video
 [https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44](https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44)
