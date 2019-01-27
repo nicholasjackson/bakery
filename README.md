@@ -16,14 +16,14 @@ The latest release can be found, in the `Releases` section, select the correct f
 
 Example Linux AMD64:
 ```bash
-(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/bakery/releases/download/v0.1.2/bakery_0.1.2_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/backup.tar.gz
+(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/bakery/releases/download/v0.1.2/bakery_0.1.2_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/bakery.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   639    0   639    0     0    193      0 --:--:--  0:00:03 --:--:--  2158
 100  752k  100  752k    0     0   138k      0  0:00:05  0:00:05 --:--:--  660k
 
 cd /mnt/stateful/lxd_conf
-tar -zxf backup.tar.gz 
+tar -zxf bakery.tar.gz 
 ```
 
 ## Backup a Crostini container
