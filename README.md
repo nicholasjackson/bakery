@@ -16,7 +16,7 @@ The latest release can be found, in the `Releases` section, select the correct f
 
 Example Linux AMD64:
 ```bash
-(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/crostini-backup-restore/releases/download/v0.0.3/crostini-backup-restore_0.0.3_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/backup.tar.gz
+(termina) chronos@localhost ~ $ curl -L https://github.com/nicholasjackson/bakery/releases/download/v0.1.2/bakery_0.1.2_Linux_amd64.tar.gz -o /mnt/stateful/lxd_conf/backup.tar.gz
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   639    0   639    0     0    193      0 --:--:--  0:00:03 --:--:--  2158
@@ -32,7 +32,7 @@ A full list of options can be found by running bakery with the help flag
 ```bash
 (termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery backup --help
 Bakery - Crostini Backup and Restore tool
-version: v0.0.3-next
+version: v0.1.2
 
 Usage of backup:
   -archive-container string
@@ -51,7 +51,7 @@ To backup a Crostini container use the following command, replace `container` wi
 ```bash
 (termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery backup -container tester -archive-location /home/jacksonnic
 Bakery - Crostini Backup and Restore tool
-version: v0.0.3-next
+version: v0.1.2
 
 Starting backup, WARNING: This operation can take a long time
 
@@ -86,7 +86,7 @@ A full list of options can be found by running bakery with the help flag
 ```bash
 (termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery restore -help
 Bakery - Crostini Backup and Restore tool
-version: v0.0.3-next
+version: v0.1.2
 
 Usage of restore:
   -archive-container string
@@ -104,7 +104,7 @@ To restore a container, first copy your backup archive to a running Crostini con
 ```bash
 (termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery restore --container tester2 -archive-location /home/jacksonnic
 Bakery - Crostini Backup and Restore tool
-version: v0.0.3-next
+version: v0.1.2
 
 Starting restore, WARNING: This operation can take a long time
 
