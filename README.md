@@ -4,6 +4,11 @@ Simple tool to backup and restore ChromeOS Crostini containers, influenced by th
 
 [![CircleCI](https://circleci.com/gh/nicholasjackson/bakery.svg?style=svg)](https://circleci.com/gh/nicholasjackson/bakery)
 
+## WARNING 
+* Backup and restore operations can take a long time depending on the size of the container
+* The volume used by your Linux installation can grow 3x as the backup and restore process will make a copy of your image, at present it is not possible to resize the volume after temporary files have been cleaned up
+* Interuption of the backup and restore process can leave your Linux install in an unstable state, it is recommended to perform this operation while connected to a power source and to set the power when idle to `Keep display on`
+
 ## Demo Video
 [https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44](https://www.useloom.com/share/71cdc4055744465f8f467f65cd26db44)
 
@@ -102,7 +107,7 @@ Usage of restore:
 To restore a container, first copy your backup archive to a running Crostini container. You can then use the following command replacing the value of the container flag with the name to which you want to restore your backup and the archive-location to the location of your backup files in a running container. Generally this is the home folder. 
 
 ```bash
-(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery restore --container tester2 -archive-location /home/jacksonnic
+(termina) chronos@localhost /mnt/stateful/lxd_conf $ ./bakery restore --container restore -archive-location /home/jacksonnic
 Bakery - Crostini Backup and Restore tool
 version: v0.1.2
 
@@ -118,11 +123,17 @@ Merge backup files back into a single archive /mnt/stateful/lxd_conf/backup.tar.
 importing backup /mnt/stateful/lxd_conf/backup.tar.gz to image backup
 Image imported with fingerprint: 3b46b83105b3f2da09e70531b41705187cf58cc1e015eb14d1b1a778ef4b962f
 
-Initializing container tester2 from image backup
-Creating tester2
+Initializing container restore from image backup
+Creating restore
 
 Deleting backup image backup
+```
 
+If you are restoring the default `penguin` instance you can now remove the temporary container and rename your restored container.
+
+```
+lxc delete penguin --force
+lxc rename restore penguin
 ```
 
 ## Testing
